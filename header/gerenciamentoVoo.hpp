@@ -8,21 +8,22 @@
 using namespace std;
 
 class GerenciamentoVoo {
- 
     private:
-        list<Voo*> voos;
-        unordered_map<string, Astronauta*> astronautas;
+        unordered_map<Astronauta, int> passageiros;
+        //unordered_map<string, Astronauta> astronautas;
 
     public:
-        void cadastrarAstronauta(string cpf, string nome, int idade);
+        //void cadastrarAstronauta(string cpf, string nome, int idade);
     
-        void cadastrarVoo(int codigoVoo);
+        //void cadastrarVoo(int codigoVoo);
     
-        void adicionarAstronautaEmVoo(string cpf, int codigoVoo);
+        void adicionarAstronautaEmVoo(int codigoVoo, Astronauta astronauta);
     
-        void removerAstronautaDeVoo(string cpf, int codigoVoo);
+        //void removerAstronautaDeVoo(int codigoVoo, Astronauta astronauta, bool verifica);
+
+        //void lancarVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas);
     
-        void listarVoos();
+        //void listarVoos();
 };
 
 #endif

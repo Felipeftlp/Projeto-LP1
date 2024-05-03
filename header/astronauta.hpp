@@ -12,10 +12,10 @@ class Astronauta {
         int idade;
         bool vivo = true;
         bool disponibilidade = true;
-
+ 
     public:
         Astronauta(string cpf, string nome, int idade);
-
+        
         string getCpf();
 
         string getNome();

@@ -1,10 +1,11 @@
 #include "../header/funcoesMenu.hpp"
 #include <iostream>
+//#include <iterator>
 //#include <unistd.h>
 
 using namespace std;
 
-void cadastrarAstronautas(GerenciamentoVoo gerenciamentoVoo){
+void cadastrarAstronautas(unordered_map<string, Astronauta> &astronautas){
     system("clear");
     string cpf;
     string nome;
@@ -18,7 +19,10 @@ void cadastrarAstronautas(GerenciamentoVoo gerenciamentoVoo){
     cout << "Informe a idade do astronauta que deseja cadastrar: ";
     cin >> idade;
 
-    gerenciamentoVoo.cadastrarAstronauta(cpf, nome, idade);
+    astronautas.insert(make_pair(cpf, Astronauta(cpf, nome, idade)));
+    cout << "Astronauta cadastrado com sucesso." << endl;
+    //gerenciamentoVoo.cadastrarAstronauta(cpf, nome, idade);
+    cout << astronautas.size();
 
     cout << "Deseja retornar ao menu inicial?" << endl;
     cout << "1 - Sim" << endl;
@@ -34,7 +38,7 @@ void cadastrarAstronautas(GerenciamentoVoo gerenciamentoVoo){
         return;
     } else if (choice == 2){
         system("clear");
-        cadastrarAstronautas(gerenciamentoVoo);
+        cadastrarAstronautas(astronautas);
     } else {
         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
         //sleep(2);
@@ -43,7 +47,7 @@ void cadastrarAstronautas(GerenciamentoVoo gerenciamentoVoo){
     }
 }
     
-void cadastrarVoos(GerenciamentoVoo gerenciamentoVoo){
+void cadastrarVoos(list<Voo> &voos){
     system("clear");
     int codigoVoo;
     int choice;
@@ -51,7 +55,10 @@ void cadastrarVoos(GerenciamentoVoo gerenciamentoVoo){
     cout << "Informe o código do voo a ser planejado: ";
     cin >> codigoVoo;
 
-    gerenciamentoVoo.cadastrarVoo(codigoVoo);
+    voos.push_back(Voo(codigoVoo));
+    cout << "Voo cadastrado com sucesso." << endl;
+    cout << voos.size();
+    //gerenciamentoVoo.cadastrarVoo(codigoVoo);
 
     cout << "Deseja retornar ao menu inicial?" << endl;
     cout << "1 - Sim" << endl;
@@ -67,7 +74,7 @@ void cadastrarVoos(GerenciamentoVoo gerenciamentoVoo){
         return;
     } else if (choice == 2){
         system("clear");
-        cadastrarVoos(gerenciamentoVoo);
+        cadastrarVoos(voos);
     } else {
         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
         //sleep(2);
@@ -76,8 +83,9 @@ void cadastrarVoos(GerenciamentoVoo gerenciamentoVoo){
     }
 }
 
-void adicionarAtronautaVoo(GerenciamentoVoo gerenciamentoVoo){
+void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas){
     system("clear");
+    GerenciamentoVoo gerencimentoVoo;
     string cpf;
     int codigoVoo;
     int choice;
@@ -87,7 +95,19 @@ void adicionarAtronautaVoo(GerenciamentoVoo gerenciamentoVoo){
     cout << "Informe o código do voo que o astronauta será adicionado: ";
     cin >> codigoVoo;
 
-    gerenciamentoVoo.adicionarAstronautaEmVoo(cpf, codigoVoo);
+    for (auto ita = begin(astronautas); ita != end(astronautas); ita++) {
+        if (ita->first == cpf) {
+            for (auto it = voos.begin(); it != voos.end(); it++) {
+                if ((it)->getCodigo() == codigoVoo) {
+                    cout << "Achou" << endl;
+                    gerencimentoVoo.adicionarAstronautaEmVoo(codigoVoo, ita->second);
+                }
+            }
+        }
+        
+    }
+
+    //gerenciamentoVoo.adicionarAstronautaEmVoo(cpf, codigoVoo);
     
     cout << "Deseja retornar ao menu inicial?" << endl;
     cout << "1 - Sim" << endl;
@@ -103,7 +123,7 @@ void adicionarAtronautaVoo(GerenciamentoVoo gerenciamentoVoo){
         return;
     } else if (choice == 2){
         system("clear");
-        adicionarAtronautaVoo(gerenciamentoVoo);
+        adicionarAtronautaVoo(voos, astronautas);
     } else {
         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
         //sleep(2);
@@ -113,20 +133,20 @@ void adicionarAtronautaVoo(GerenciamentoVoo gerenciamentoVoo){
     
 }
 
-// void removerAstronautaVoo(unordered_map<string, Astronauta*> astronautas, list<Voo*> voos){
+// void removerAstronautaVoo(unordered_map<string, Astronauta> &astronautas, list<Voo> &voos){
 //     system("clear");
+//     GerenciamentoVoo gerenciamentoVoo;
 //     string cpf;
 //     int codigoVoo;
 //     int choice;
 //     bool verifica = false;
-//     list<Astronauta*>::iterator ita;
-//     list<Voo*>::iterator it;
+//     list<Voo>::iterator it;
 
 //     cout << "Informe o código do voo que terá o(s) astronauta(s) removido(s): ";
 //     cin >> codigoVoo;
 
 //     for (it = voos.begin(); it != voos.end(); ++it) {
-//         if ((*it)->getCodigo() == codigoVoo) {
+//         if ((it)->getCodigo() == codigoVoo) {
 //             verifica = true;
 //         }
 //     }
@@ -144,16 +164,16 @@ void adicionarAtronautaVoo(GerenciamentoVoo gerenciamentoVoo){
 //         cout << "Informe o cpf do astronauta a ser removido: ";
 //         cin >> cpf;
 
-//         for (ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
-//             if ((*ita)->getCpf() == cpf) {
-//                 verifica = true;
+//         for (auto ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
+//             if ((ita)->first == cpf) {
+//                 gerenciamentoVoo.removerAstronautaDeVoo(codigoVoo, (ita)->second, verifica);
 //             }
 //         }
         
 //         if (verifica) {
-//             (*it)->removerPassageiro(cpf);
+//             cout << "Astronauta removido" << endl;
 //         } else {
-//             cout << "Astronauta não encontrado" << endl;
+//             cout << "O astronauta não existe ou não está no voo informado" << endl;
 //         }
 
 //         do {

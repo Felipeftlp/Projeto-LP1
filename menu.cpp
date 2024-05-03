@@ -9,11 +9,10 @@
 using namespace std;
 
 int main() {
-
-    GerenciamentoVoo gerenciamentoVoo;
-    //unordered_map<string, Astronauta*> astronautas;
+//    GerenciamentoVoo gerenciamentoVoo;
+    unordered_map<string, Astronauta> astronautas;
     //list<Astronauta*> astronautas;
-    //list<Voo*> voos;
+    list<Voo> voos;
     setlocale(LC_ALL, "pt_BR");
 
     int choice;
@@ -36,13 +35,13 @@ int main() {
 
         switch (choice) {
             case 1:
-                cadastrarAstronautas(gerenciamentoVoo);
+                cadastrarAstronautas(astronautas);
                 break;
             case 2:
-                cadastrarVoos(gerenciamentoVoo);
+                cadastrarVoos(voos);
                 break;
             case 3:
-                adicionarAtronautaVoo(gerenciamentoVoo);
+                adicionarAtronautaVoo(voos, astronautas);
                 break;
             case 4:
                 //removerAstronautaVoo(astronautas, voos);

@@ -14,7 +14,6 @@ class Voo {
         // c - em curso
         // f - finalizado
         // e - explodiu
-        list<Astronauta*> passageiros;
 
     public:
         Voo(int codigoVoo);
@@ -23,21 +22,21 @@ class Voo {
 
         char getStatus();
 
-        list<Astronauta*> getPassageiros();
+        //list<Astronauta> getPassageiros();
 
         void setCodigo(int codigoVoo);
 
         void setStatus(char novo_status);
     
-        void adicionarAstronauta(Astronauta* astronautas);
+        //void adicionarAstronauta(Astronauta astronautas);
 
-        void removerAstronauta(string cpf);
+        // void removerAstronauta(string cpf);
 
-        void lancarVoo(list<Astronauta*> astronautas);
+        // void lancarVoo(list<Astronauta*> astronautas);
 
-        void explodirVoo();
+        // void explodirVoo();
 
-        void finalizarVoo(list<Astronauta*> astronautas);
+        // void finalizarVoo(list<Astronauta*> astronautas);
     };
 
 #endif

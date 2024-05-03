@@ -7,13 +7,13 @@
  
 using namespace std;
 
-void cadastrarAstronautas(GerenciamentoVoo gerenciamentoVoo);
+void cadastrarAstronautas(unordered_map<string, Astronauta> &astronautas);
 
-void cadastrarVoos(GerenciamentoVoo gerenciamentoVoo);
+void cadastrarVoos(list<Voo> &voos);
 
-void adicionarAtronautaVoo(GerenciamentoVoo gerenciamentoVoo);
+void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas);
 
-// void removerAstronautaVoo(unordered_map<string, Astronauta*> astronautas, list<Voo*> voos);
+//void removerAstronautaVoo(unordered_map<string, Astronauta> &astronautas, list<Voo> &voos);
 
 // void lancarVoo(list<Voo*> voos);
 
