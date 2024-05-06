@@ -1,6 +1,4 @@
 #include <iostream>
-//#include <list>
-//#include <unordered_map>
 #include "header/astronauta.hpp"
 #include "header/voo.hpp"
 #include "header/funcoesMenu.hpp"
@@ -9,10 +7,10 @@
 using namespace std;
 
 int main() {
-//    GerenciamentoVoo gerenciamentoVoo;
-    unordered_map<string, Astronauta> astronautas;
-    //list<Astronauta*> astronautas;
+    GerenciamentoVoo gerenciamentoVoo;
+    list<Astronauta> astronautas;
     list<Voo> voos;
+    multimap<int, Astronauta> passageiros;
     setlocale(LC_ALL, "pt_BR");
 
     int choice;
@@ -41,25 +39,25 @@ int main() {
                 cadastrarVoos(voos);
                 break;
             case 3:
-                adicionarAtronautaVoo(voos, astronautas);
+                adicionarAtronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
                 break;
             case 4:
-                //removerAstronautaVoo(astronautas, voos);
+                removerAstronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
                 break;
             case 5:
-                //lancarVoo(voos);
+                lancarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
                 break;
             case 6:
-                //explodirVoo(voos);
+                explodirVoo(voos, astronautas, passageiros, gerenciamentoVoo);
                 break;
             case 7:
-                //finalizarVoo(astronautas, voos);
+                finalizarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
                 break;
             case 8:
-                //listarVoo(astronautas, voos);
+                listarVoo(voos, passageiros);
                 break;
             case 9:
-                //listarAstronautasMortos(astronautas);
+                listarAstronautasMortos(astronautas);
                 break;
             case 0:
                 printf("Saindo...\n");

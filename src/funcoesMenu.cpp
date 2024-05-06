@@ -1,11 +1,10 @@
 #include "../header/funcoesMenu.hpp"
 #include <iostream>
-//#include <iterator>
 //#include <unistd.h>
 
 using namespace std;
 
-void cadastrarAstronautas(unordered_map<string, Astronauta> &astronautas){
+void cadastrarAstronautas(list<Astronauta> &astronautas){
     system("clear");
     string cpf;
     string nome;
@@ -19,10 +18,8 @@ void cadastrarAstronautas(unordered_map<string, Astronauta> &astronautas){
     cout << "Informe a idade do astronauta que deseja cadastrar: ";
     cin >> idade;
 
-    astronautas.insert(make_pair(cpf, Astronauta(cpf, nome, idade)));
+    astronautas.push_back(Astronauta(cpf, nome, idade));
     cout << "Astronauta cadastrado com sucesso." << endl;
-    //gerenciamentoVoo.cadastrarAstronauta(cpf, nome, idade);
-    cout << astronautas.size();
 
     cout << "Deseja retornar ao menu inicial?" << endl;
     cout << "1 - Sim" << endl;
@@ -57,8 +54,6 @@ void cadastrarVoos(list<Voo> &voos){
 
     voos.push_back(Voo(codigoVoo));
     cout << "Voo cadastrado com sucesso." << endl;
-    cout << voos.size();
-    //gerenciamentoVoo.cadastrarVoo(codigoVoo);
 
     cout << "Deseja retornar ao menu inicial?" << endl;
     cout << "1 - Sim" << endl;
@@ -83,9 +78,8 @@ void cadastrarVoos(list<Voo> &voos){
     }
 }
 
-void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas){
+void adicionarAtronautaVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo){
     system("clear");
-    GerenciamentoVoo gerencimentoVoo;
     string cpf;
     int codigoVoo;
     int choice;
@@ -95,19 +89,15 @@ void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &a
     cout << "Informe o código do voo que o astronauta será adicionado: ";
     cin >> codigoVoo;
 
-    for (auto ita = begin(astronautas); ita != end(astronautas); ita++) {
-        if (ita->first == cpf) {
+    for (auto ita = astronautas.begin(); ita != astronautas.end(); ita++) {
+        if (ita->getCpf() == cpf) {
             for (auto it = voos.begin(); it != voos.end(); it++) {
                 if ((it)->getCodigo() == codigoVoo) {
-                    cout << "Achou" << endl;
-                    gerencimentoVoo.adicionarAstronautaEmVoo(codigoVoo, ita->second);
+                    gerenciamentoVoo.adicionarAstronautaEmVoo(codigoVoo, (*ita), passageiros);
                 }
             }
         }
-        
     }
-
-    //gerenciamentoVoo.adicionarAstronautaEmVoo(cpf, codigoVoo);
     
     cout << "Deseja retornar ao menu inicial?" << endl;
     cout << "1 - Sim" << endl;
@@ -123,7 +113,7 @@ void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &a
         return;
     } else if (choice == 2){
         system("clear");
-        adicionarAtronautaVoo(voos, astronautas);
+        adicionarAtronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
     } else {
         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
         //sleep(2);
@@ -133,242 +123,275 @@ void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &a
     
 }
 
-// void removerAstronautaVoo(unordered_map<string, Astronauta> &astronautas, list<Voo> &voos){
-//     system("clear");
-//     GerenciamentoVoo gerenciamentoVoo;
-//     string cpf;
-//     int codigoVoo;
-//     int choice;
-//     bool verifica = false;
-//     list<Voo>::iterator it;
+void removerAstronautaVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo){
+    system("clear");
+    string cpf;
+    int codigoVoo;
+    int choice;
+    bool verifica = false;
+    list<Voo>::iterator it;
 
-//     cout << "Informe o código do voo que terá o(s) astronauta(s) removido(s): ";
-//     cin >> codigoVoo;
+    cout << "Informe o código do voo que terá o(s) astronauta(s) removido(s): ";
+    cin >> codigoVoo;
 
-//     for (it = voos.begin(); it != voos.end(); ++it) {
-//         if ((it)->getCodigo() == codigoVoo) {
-//             verifica = true;
-//         }
-//     }
+    for (it = voos.begin(); it != voos.end(); ++it) {
+        if ((it)->getCodigo() == codigoVoo) {
+            verifica = true;
+        }
+    }
 
-//     if (verifica) {
-//         verifica = false;
-//     } else {
-//         cout << "Voo não encontrado" << endl;
-//         //sleep(2);
-//         system("clear");
-//         removerAstronautaVoo(astronautas, voos);
-//     }
+    if (verifica) {
+        verifica = false;
+    } else {
+        cout << "Voo não encontrado" << endl;
+        //sleep(2);
+        system("clear");
+        removerAstronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    }
 
-//     do {   
-//         cout << "Informe o cpf do astronauta a ser removido: ";
-//         cin >> cpf;
+    do {   
+        cout << "Informe o cpf do astronauta a ser removido: ";
+        cin >> cpf;
 
-//         for (auto ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
-//             if ((ita)->first == cpf) {
-//                 gerenciamentoVoo.removerAstronautaDeVoo(codigoVoo, (ita)->second, verifica);
-//             }
-//         }
-        
-//         if (verifica) {
-//             cout << "Astronauta removido" << endl;
-//         } else {
-//             cout << "O astronauta não existe ou não está no voo informado" << endl;
-//         }
+        for (auto ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
+            if ((ita)->getCpf() == cpf) {
+                gerenciamentoVoo.removerAstronautaDeVoo(codigoVoo, (*ita), verifica, passageiros);
+            }
+        }
 
-//         do {
-//             system("clear");
-//             cout << "Deseja remover outro astronauta desse voo" << endl;
-//             cout << "1 - sim | 2 - não" << endl;
-//             cin >> choice;
-//         } while ((choice != 1) && (choice != 2));
-//     } while (choice != 2);
+        do {
+            cout << "Deseja remover outro astronauta desse voo" << endl;
+            cout << "1 - sim | 2 - não" << endl;
+            cin >> choice;
+        } while ((choice != 1) && (choice != 2));
+    } while (choice != 2);
     
-//     cout << "Deseja retornar ao menu inicial?" << endl;
-//     cout << "1 - Sim" << endl;
-//     cout << "2 - Não" << endl;
-//     cout << "Escolha uma opção: ";
-//     cin >> choice;
+    system("clear");
+    cout << "Deseja retornar ao menu inicial?" << endl;
+    cout << "1 - Sim" << endl;
+    cout << "2 - Não" << endl;
+    cout << "Escolha uma opção: ";
+    cin >> choice;
 
-//     if (choice == 1) {
-//         system("clear");
-//         cout << "Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     } else if (choice == 2){
-//         system("clear");
-//         removerAstronautaVoo(astronautas, voos);
-//     } else {
-//         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     }
-// }
+    if (choice == 1) {
+        system("clear");
+        cout << "Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    } else if (choice == 2){
+        system("clear");
+        removerAstronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    } else {
+        cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    }
+}
 
-// void lancarVoo(list<Voo*> voos){
-//     system("clear");
-//     int codigoVoo;
-//     int choice;
-//     bool verifica = false;
-//     list<Voo*>::iterator it;
-//     list<Astronauta*> passageiros;
+void lancarVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo){
+    system("clear");
+    int codigoVoo;
+    int choice;
+    bool verifica = false;
 
-//     cout << "Informe o código do voo que deseja lançar: ";
-//     cin >> codigoVoo;
+    cout << "Informe o código do voo que deseja lançar: ";
+    cin >> codigoVoo;
 
-//     for (it = voos.begin(); it != voos.end(); ++it) {
-//         if ((*it)->getCodigo() == codigoVoo) {
-//             verifica = true;
-//         }
-//     }
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        if ((it)->getCodigo() == codigoVoo) {
+            verifica = true;
+            gerenciamentoVoo.lancarVoo((*it), astronautas, passageiros);
+        }
+    }
 
-//     if (verifica) {
-//         passageiros = (*it)->getPassageiros();
-//         (*it)->lancarVoo(passageiros);
-//     } else {
-//         cout << "Voo não encontrado" << endl;
-//         //sleep(2);
-//         system("clear");
-//         lancarVoo(voos);
-//     }
+    if (!verifica) {
+        cout << "Voo não encontrado" << endl;
+        //sleep(2);
+        system("clear");
+        lancarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    }
     
-//     cout << "Deseja retornar ao menu inicial?" << endl;
-//     cout << "1 - Sim" << endl;
-//     cout << "2 - Não" << endl;
-//     cout << "Escolha uma opção: ";
-//     cin >> choice;
+    cout << "Deseja retornar ao menu inicial?" << endl;
+    cout << "1 - Sim" << endl;
+    cout << "2 - Não" << endl;
+    cout << "Escolha uma opção: ";
+    cin >> choice;
 
-//     if (choice == 1) {
-//         system("clear");
-//         cout << "Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     } else if (choice == 2){
-//         system("clear");
-//         lancarVoo(voos);
-//     } else {
-//         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     }
-// }
+    if (choice == 1) {
+        system("clear");
+        cout << "Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    } else if (choice == 2){
+        system("clear");
+        lancarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    } else {
+        cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    }
+}
 
-// void explodirVoo(list<Voo*> voos){
-//     system("clear");
-//     int codigoVoo;
-//     int choice;
-//     bool verifica = false;
-//     list<Voo*>::iterator it;
-// //    list<Astronauta*> passageiros;
+void explodirVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo){
+    system("clear");
+    int codigoVoo;
+    int choice;
+    bool verifica = false;
 
-//     cout << "Informe o código do voo que deseja explodir: ";
-//     cin >> codigoVoo;
+    cout << "Informe o código do voo que deseja explodir: ";
+    cin >> codigoVoo;
 
-//     for (it = voos.begin(); it != voos.end(); ++it) {
-//         if ((*it)->getCodigo() == codigoVoo) {
-//             verifica = true;
-//         }
-//     }
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        if ((it)->getCodigo() == codigoVoo) {
+            verifica = true;
+            gerenciamentoVoo.explodirVoo((*it), astronautas, passageiros);
+            break;
+        }
+    }
 
-//     if (verifica) {
-// //        passageiros = (*it)->getPassageiros();
-//         (*it)->explodirVoo();
-//     } else {
-//         cout << "Voo não encontrado" << endl;
-//         //sleep(2);
-//         system("clear");
-//         explodirVoo(voos);
-//     }
+    if (!verifica) {
+        cout << "Voo não encontrado" << endl;
+        //sleep(2);
+        system("clear");
+        explodirVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    }
     
-//     cout << "Deseja retornar ao menu inicial?" << endl;
-//     cout << "1 - Sim" << endl;
-//     cout << "2 - Não" << endl;
-//     cout << "Escolha uma opção: ";
-//     cin >> choice;
+    cout << "Deseja retornar ao menu inicial?" << endl;
+    cout << "1 - Sim" << endl;
+    cout << "2 - Não" << endl;
+    cout << "Escolha uma opção: ";
+    cin >> choice;
 
-//     if (choice == 1) {
-//         system("clear");
-//         cout << "Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     } else if (choice == 2){
-//         system("clear");
-//         explodirVoo(voos);
-//     } else {
-//         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     }
-// }
+    if (choice == 1) {
+        system("clear");
+        cout << "Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    } else if (choice == 2){
+        system("clear");
+        explodirVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    } else {
+        cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    }
+}
 
-// void finalizarVoo(unordered_map<string, Astronauta*> astronautas, list<Voo*> voos){
-//     system("clear");
-//     int codigoVoo;
-//     int choice;
-//     bool verifica = false;
-//     list<Voo*>::iterator it;
-//     list<Astronauta*> passageiros;
+void finalizarVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo){
+    system("clear");
+    int codigoVoo;
+    int choice;
+    bool verifica = false;
 
-//     cout << "Informe o código do voo que deseja finalizar: ";
-//     cin >> codigoVoo;
+    cout << "Informe o código do voo que deseja finalizar: ";
+    cin >> codigoVoo;
 
-//     for (it = voos.begin(); it != voos.end(); ++it) {
-//         if ((*it)->getCodigo() == codigoVoo) {
-//             verifica = true;
-//         }
-//     }
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        if ((it)->getCodigo() == codigoVoo) {
+            verifica = true;
+            gerenciamentoVoo.finalizarVoo((*it), astronautas, passageiros);
+        }
+    }
 
-//     if (verifica) {
-//         passageiros = (*it)->getPassageiros();
-//         (*it)->finalizarVoo(passageiros);
-//     } else {
-//         cout << "Voo não encontrado" << endl;
-//         //sleep(2);
-//         system("clear");
-//         finalizarVoo(astronautas, voos);
-//     }
+    if (!verifica) {
+        cout << "Voo não encontrado" << endl;
+        //sleep(2);
+        system("clear");
+        finalizarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    }
     
-//     cout << "Deseja retornar ao menu inicial?" << endl;
-//     cout << "1 - Sim" << endl;
-//     cout << "2 - Não" << endl;
-//     cout << "Escolha uma opção: ";
-//     cin >> choice;
+    cout << "Deseja retornar ao menu inicial?" << endl;
+    cout << "1 - Sim" << endl;
+    cout << "2 - Não" << endl;
+    cout << "Escolha uma opção: ";
+    cin >> choice;
 
-//     if (choice == 1) {
-//         system("clear");
-//         cout << "Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     } else if (choice == 2){
-//         system("clear");
-//         finalizarVoo(astronautas, voos);
-//     } else {
-//         cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
-//         //sleep(2);
-//         system("clear");
-//         return;
-//     }
-// }
+    if (choice == 1) {
+        system("clear");
+        cout << "Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    } else if (choice == 2){
+        system("clear");
+        finalizarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+    } else {
+        cout << "Valor inválido. Voltando ao Menu Principal..." << endl;
+        //sleep(2);
+        system("clear");
+        return;
+    }
+}
 
-// void listarVoo(unordered_map<string, Astronauta*> astronautas, list<Voo*> voos){
-//     system("clear");
-//     for (Voo* voo : voos) {
-//         cout << "Código do Voo: " << voo->getCodigo() << endl;
-//         cout << "Passageiros: ";
-//         for (Astronauta* astronauta : voo->getPassageiros()) {
-//             cout << astronauta->getNome() << " ";
-//         }
-//         cout << endl;
-//     }
-// }
+void listarVoo(list<Voo> &voos, multimap<int, Astronauta> &passageiros) {
+    system("clear");
+    cout << "=== Voos em planejamento ===" << endl;
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        cout << "   Voo: " << it->getCodigo() << endl;
+        if (it->getStatus() == 'p') {
+            cout << "   Astronautas no voo:" << endl;    
+            for (auto itp = passageiros.find(it->getCodigo()); itp != passageiros.upper_bound(it->getCodigo()); ++itp) {
+                cout << "       Nome: " << itp->second.getNome() << ", Cpf: " << itp->second.getCpf() << ", Idade: " << itp->second.getIdade() << endl;
+            }
+        } 
+    }
 
-// void listarAstronautasMortos(unordered_map<string, Astronauta*> astronautas){
-//     system("clear");
-// }
+    cout << "=== Voos em curso ===" << endl;
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        cout << "   Voo: " << it->getCodigo() << endl;
+        if (it->getStatus() == 'c') {
+            cout << "   Astronautas no voo:" << endl;    
+            for (auto itp = passageiros.find(it->getCodigo()); itp != passageiros.upper_bound(it->getCodigo()); ++itp) {
+                cout << "       Nome: " << itp->second.getNome() << ", Cpf: " << itp->second.getCpf() << ", Idade: " << itp->second.getIdade() << endl;
+            }
+        } 
+    }
+
+    cout << "=== Voos finalizados sem sucesso ===" << endl;
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        cout << "   Voo: " << it->getCodigo() << endl;
+        if (it->getStatus() == 'e') {
+            cout << "   Astronautas no voo:" << endl;    
+            for (auto itp = passageiros.find(it->getCodigo()); itp != passageiros.upper_bound(it->getCodigo()); ++itp) {
+                cout << "       Nome: " << itp->second.getNome() << ", Cpf: " << itp->second.getCpf() << ", Idade: " << itp->second.getIdade() << endl;
+            }
+        } 
+    }
+
+    cout << "=== Voos finalizados com sucesso ===" << endl;
+    for (auto it = voos.begin(); it != voos.end(); ++it) {
+        cout << "   Voo: " << it->getCodigo() << endl;
+        if (it->getStatus() == 'f') {
+            cout << "   Astronautas no voo:" << endl;    
+            for (auto itp = passageiros.find(it->getCodigo()); itp != passageiros.upper_bound(it->getCodigo()); ++itp) {
+                cout << "       Nome: " << itp->second.getNome() << ", Cpf: " << itp->second.getCpf() << ", Idade: " << itp->second.getIdade() << endl;
+            }
+        } 
+    }
+}
+
+void listarAstronautasMortos(list<Astronauta> &astronautas){
+    system("clear");
+    cout << "=== Astronautas Mortos ===" << endl;
+    
+    for (auto it = astronautas.begin(); it != astronautas.end(); ++it) {
+        if (it->getVivo() == false) {
+            cout << "Nome: " << it->getNome() << ", CPF: " << it->getCpf() << endl;
+            list<int> voos = it->getHistorico();
+            cout << "Voos que participou: ";
+            for (auto itv = voos.begin(); itv != voos.end(); ++itv) {
+                if(itv == voos.end()){
+                    cout << (*itv) << "";
+                } else {
+                    cout << (*itv) << ", ";
+                }
+            }
+        }
+    }
+}

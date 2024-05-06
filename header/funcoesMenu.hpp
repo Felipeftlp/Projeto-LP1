@@ -4,25 +4,25 @@
 #include "astronauta.hpp"
 #include "voo.hpp"
 #include "gerenciamentoVoo.hpp"
- 
+
 using namespace std;
 
-void cadastrarAstronautas(unordered_map<string, Astronauta> &astronautas);
+void cadastrarAstronautas(list<Astronauta> &astronautas);
 
 void cadastrarVoos(list<Voo> &voos);
 
-void adicionarAtronautaVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas);
+void adicionarAtronautaVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
 
-//void removerAstronautaVoo(unordered_map<string, Astronauta> &astronautas, list<Voo> &voos);
+void removerAstronautaVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
 
-// void lancarVoo(list<Voo*> voos);
+void lancarVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
 
-// void explodirVoo(list<Voo*> voos);
+void explodirVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
 
-// void finalizarVoo(unordered_map<string, Astronauta*> astronautas, list<Voo*> voos);
+void finalizarVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
 
-// void listarVoo(unordered_map<string, Astronauta*>, list<Voo*> voos);
+void listarVoo(list<Voo> &voos, multimap<int, Astronauta> &passageiros);
 
-// void listarAstronautasMortos(unordered_map<string, Astronauta*> astronautas);
+void listarAstronautasMortos(list<Astronauta> &astronautas);
 
 #endif

@@ -2,6 +2,7 @@
 #define ASTRONAUTA_HPP
 
 #include <string>
+#include <list>
 
 using namespace std;
 
@@ -12,7 +13,8 @@ class Astronauta {
         int idade;
         bool vivo = true;
         bool disponibilidade = true;
- 
+        list<int> voos;
+
     public:
         Astronauta(string cpf, string nome, int idade);
         
@@ -26,6 +28,8 @@ class Astronauta {
 
         bool getDisponibilidade();
 
+        list<int> getHistorico();
+
         void setCpf(string cpf);
 
         void setNome(string nome);
@@ -35,6 +39,8 @@ class Astronauta {
         void setVivo(bool vivo);
 
         void setDisponibilidade(bool disponibilidade);
+
+        void adicionarVooAoHistorico(int codigoVoo);
 };
 
 #endif

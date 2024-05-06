@@ -31,6 +31,10 @@ bool Astronauta::getDisponibilidade(){
     return disponibilidade;
 }
 
+list<int> Astronauta::getHistorico(){
+    return voos;
+}
+
 //Métodos setters
 void Astronauta::setCpf(string cpf){
     this->cpf = cpf;
@@ -50,4 +54,8 @@ void Astronauta::setVivo(bool vivo){
 
 void Astronauta::setDisponibilidade(bool disponibilidade){
     this->disponibilidade = disponibilidade;
+}
+
+void Astronauta::adicionarVooAoHistorico(int codigoVoo){
+    this->voos.push_back(codigoVoo);
 }

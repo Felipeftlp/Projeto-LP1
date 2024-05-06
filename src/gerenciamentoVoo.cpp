@@ -18,31 +18,114 @@
 //     cout << voos.size();
 // }
 
-void GerenciamentoVoo::adicionarAstronautaEmVoo(int codigoVoo, Astronauta astronauta) {
-    passageiros.insert(make_pair(astronauta, codigoVoo));
-    cout << "O astronauta " << astronauta.getNome() << "foi adiconado no voo " << codigoVoo;
+void GerenciamentoVoo::adicionarAstronautaEmVoo(int codigoVoo, Astronauta &astronauta, multimap<int, Astronauta> &passageiros) {
+    passageiros.insert(make_pair(codigoVoo, astronauta));
+    cout << "O astronauta " << astronauta.getNome() << " foi adiconado no voo " << codigoVoo << endl;
 }
 
-// void GerenciamentoVoo::removerAstronautaDeVoo(int codigoVoo, Astronauta astronauta, bool verifica) {
-//     for (auto it = passageiros.begin(); it != passageiros.end(); ++it) {
-//         if (((it)->second == codigoVoo)) {
-//             verifica = true;
-//             passageiros.erase(astronauta);
-//         }
-//     }
-// }
+void GerenciamentoVoo::removerAstronautaDeVoo(int codigoVoo, Astronauta &astronauta, bool verifica, multimap<int, Astronauta> &passageiros) {
+    auto it = passageiros.find(codigoVoo);
+    
+    while (it != passageiros.upper_bound(codigoVoo)) {
+        if (it->second.getCpf() == astronauta.getCpf()) {
+            verifica = true;
+            it = passageiros.erase(it);
+        } else {
+            ++it;
+        }
+    }
 
-//void GerenciamentoVoo::lancarVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas){
+    if (verifica) {
+        cout << "Astronauta removido" << endl;
+    } else {
+        cout << "O astronauta não existe ou não está no voo informado" << endl;
+    }
+}
 
-//}
+void GerenciamentoVoo::lancarVoo(Voo &voo, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros) {
+    bool podeLancar = true;
+    int cont = 0;
 
-// void GerenciamentoVoo::listarVoos() {
-//     for (Voo* voo : voos) {
-//         cout << "Código do Voo: " << voo->getCodigo() << endl;
-//         cout << "Passageiros: ";
-//         for (Astronauta* astronauta : voo->getPassageiros()) {
-//             cout << astronauta->getNome() << " ";
-//         }
-//         cout << endl;
-//     }
-// }
+    for (auto it = passageiros.begin(); it != passageiros.end(); ++it) {
+        if (it->first == voo.getCodigo()) {
+            cont++;
+        }
+    }
+
+    if ((cont > 0) && (voo.getStatus() == 'p')) {    
+        for (auto it = passageiros.find(voo.getCodigo()); it != passageiros.upper_bound(voo.getCodigo()); ++it) {
+            if (it->second.getDisponibilidade() == false) {
+                podeLancar = false;
+            }
+        }
+
+        if (podeLancar) {
+            cout << "Voo lançado com sucesso." << endl;
+            voo.setStatus('c');
+            for (auto it = passageiros.find(voo.getCodigo()); it != passageiros.upper_bound(voo.getCodigo()); ++it) {
+                for (auto ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
+                    if (it->second.getCpf() == ita->getCpf()) {
+                        ita->setDisponibilidade(false);
+                        ita->adicionarVooAoHistorico(voo.getCodigo());
+                        break;
+                    }
+                }
+                for (auto itp = passageiros.begin(); itp != passageiros.end(); ++itp) {
+                    if (it->second.getCpf() == itp->second.getCpf()) {
+                        itp->second.setDisponibilidade(false);
+                    }
+                }
+            }
+        } else {
+            cout << "Verifique a disponibilidade dos astronautas antes, ou remova algum(ns) dele(s) do voo." << endl;
+        }
+    } else {
+        cout << "Não é possível lançar o voo." << endl;
+    }
+}
+
+void GerenciamentoVoo::explodirVoo(Voo &voo, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros) {
+    if ((voo.getStatus() == 'c')) {
+        cout << "Voo " << voo.getCodigo() << " explodido com sucesso." << endl;
+        voo.setStatus('e');
+
+        for (auto it = passageiros.find(voo.getCodigo()); it != passageiros.upper_bound(voo.getCodigo()); ++it) {
+            for (auto ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
+                if (it->second.getCpf() == ita->getCpf()) {
+                    ita->setVivo(false);
+                    break;
+                }
+            }
+            for (auto itp = passageiros.begin(); itp != passageiros.end(); ++itp) {
+                if (it->second.getCpf() == itp->second.getCpf()) {
+                    itp->second.setVivo(false);
+                }
+            }
+        }
+    } else {
+        cout << "Não é possível explodir o voo." << endl;
+    }
+}
+
+void GerenciamentoVoo::finalizarVoo(Voo &voo, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros) {
+    if ((voo.getStatus() == 'c')) {
+        cout << "Voo " << voo.getCodigo() << " finalizado com sucesso." << endl;
+        voo.setStatus('f');
+
+        for (auto it = passageiros.find(voo.getCodigo()); it != passageiros.upper_bound(voo.getCodigo()); ++it) {
+            for (auto ita = astronautas.begin(); ita != astronautas.end(); ++ita) {
+                if (it->second.getCpf() == ita->getCpf()) {
+                    ita->setDisponibilidade(true);
+                    break;
+                }
+            }
+            for (auto itp = passageiros.begin(); itp != passageiros.end(); ++itp) {
+                if (it->second.getCpf() == itp->second.getCpf()) {
+                    itp->second.setDisponibilidade(true);
+                }
+            }
+        }
+    } else {
+        cout << "Não é possível explodir o voo." << endl;
+    }
+}

@@ -1,7 +1,7 @@
 #ifndef GERENCIAMENTOVOO_HPP
 #define GERENCIAMENTOVOO_HPP
 
-#include <unordered_map>
+#include <map>
 #include "astronauta.hpp"
 #include "voo.hpp"
 
@@ -9,7 +9,7 @@ using namespace std;
 
 class GerenciamentoVoo {
     private:
-        unordered_map<Astronauta, int> passageiros;
+        //map<int, Astronauta> passageiros;
         //unordered_map<string, Astronauta> astronautas;
 
     public:
@@ -17,13 +17,15 @@ class GerenciamentoVoo {
     
         //void cadastrarVoo(int codigoVoo);
     
-        void adicionarAstronautaEmVoo(int codigoVoo, Astronauta astronauta);
+        void adicionarAstronautaEmVoo(int codigoVoo, Astronauta &astronauta, multimap<int, Astronauta> &passageiros);
     
-        //void removerAstronautaDeVoo(int codigoVoo, Astronauta astronauta, bool verifica);
+        void removerAstronautaDeVoo(int codigoVoo, Astronauta &astronauta, bool verifica, multimap<int, Astronauta> &passageiros);
 
-        //void lancarVoo(list<Voo> &voos, unordered_map<string, Astronauta> &astronautas);
-    
-        //void listarVoos();
+        void lancarVoo(Voo &voo, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros);
+
+        void explodirVoo(Voo &voo, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros);
+
+        void finalizarVoo(Voo &voo, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros);
 };
 
 #endif
