@@ -16,6 +16,8 @@ class Voo {
         // e - explodiu
 
     public:
+        Voo();
+
         Voo(int codigoVoo);
         
         int getCodigo();

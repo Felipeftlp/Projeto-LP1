@@ -1,6 +1,8 @@
 #include "../header/voo.hpp"
 #include <iostream>
 
+Voo::Voo() {}
+
 Voo::Voo(int codigoVoo){
     this->codigoVoo = codigoVoo;
     this->status = 'p';

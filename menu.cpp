@@ -1,18 +1,16 @@
 #include <iostream>
+#include <list>
+#include <string>
 #include "header/astronauta.hpp"
 #include "header/voo.hpp"
 #include "header/funcoesMenu.hpp"
-#include "header/gerenciamentoVoo.hpp"
+//#include "header/gerenciamentoVoo.hpp"
 
 using namespace std;
 
 int main() {
-    GerenciamentoVoo gerenciamentoVoo;
-    list<Astronauta> astronautas;
-    list<Voo> voos;
-    multimap<int, Astronauta> passageiros;
-    setlocale(LC_ALL, "pt_BR");
 
+    FuncoesMenu funcoesMenu;
     int choice;
 
     do {
@@ -33,31 +31,31 @@ int main() {
 
         switch (choice) {
             case 1:
-                cadastrarAstronautas(astronautas);
+                funcoesMenu.cadastrarAstronautas();
                 break;
             case 2:
-                cadastrarVoos(voos);
+                funcoesMenu.cadastrarVoos();
                 break;
             case 3:
-                adicionarAtronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+                funcoesMenu.adicionarAtronautaVoo();
                 break;
             case 4:
-                removerAstronautaVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+                funcoesMenu.removerAstronautaVoo();
                 break;
             case 5:
-                lancarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+                funcoesMenu.lancarVoo();
                 break;
             case 6:
-                explodirVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+                funcoesMenu.explodirVoo();
                 break;
             case 7:
-                finalizarVoo(voos, astronautas, passageiros, gerenciamentoVoo);
+                funcoesMenu.finalizarVoo();
                 break;
             case 8:
-                listarVoo(voos, passageiros);
+                funcoesMenu.listarVoo();
                 break;
             case 9:
-                listarAstronautasMortos(astronautas);
+                funcoesMenu.listarAstronautasMortos();
                 break;
             case 0:
                 printf("Saindo...\n");

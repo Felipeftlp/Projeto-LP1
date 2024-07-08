@@ -16,6 +16,8 @@ class Astronauta {
         list<int> voos;
 
     public:
+        Astronauta();
+
         Astronauta(string cpf, string nome, int idade);
         
         string getCpf();

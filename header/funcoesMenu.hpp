@@ -1,28 +1,42 @@
 #ifndef FUNCOES_MENU_HPP
 #define FUNCOES_MENU_HPP
 
+#include <list>
+#include <map>
 #include "astronauta.hpp"
 #include "voo.hpp"
-#include "gerenciamentoVoo.hpp"
+//#include "gerenciamentoVoo.hpp"
 
 using namespace std;
 
-void cadastrarAstronautas(list<Astronauta> &astronautas);
+class FuncoesMenu {
+    private:
+        list<Astronauta> astronautas;
+        list<Voo> voos;
+        map<string, Astronauta> astronautasCPF;
+        map<int, Voo> codigoVoos;
+        multimap<int, Astronauta> passageirosVoo;
 
-void cadastrarVoos(list<Voo> &voos);
+    public:
+        FuncoesMenu();
 
-void adicionarAtronautaVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
+        //Astronautas
+        //Astronauta& acharAstronauta(const string& cpf);
+        //bool astronautaExiste(string);
+        void cadastrarAstronautas();
+        void adicionarAtronautaVoo();
+        void removerAstronautaVoo();
+        void listarAstronautasMortos();
 
-void removerAstronautaVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
+        //Voos
+        //Voo& acharVoo(int codigoVoo);
+        //bool vooExiste(int codigoVoo);
+        void cadastrarVoos();
+        void lancarVoo();
+        void explodirVoo();
+        void finalizarVoo();
+        void listarVoo();
 
-void lancarVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
-
-void explodirVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
-
-void finalizarVoo(list<Voo> &voos, list<Astronauta> &astronautas, multimap<int, Astronauta> &passageiros, GerenciamentoVoo gerenciamentoVoo);
-
-void listarVoo(list<Voo> &voos, multimap<int, Astronauta> &passageiros);
-
-void listarAstronautasMortos(list<Astronauta> &astronautas);
+};
 
 #endif
